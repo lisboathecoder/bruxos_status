@@ -132,6 +132,7 @@ const deleteBruxo = (req, res) => {
       message: `O id deve ser um número válido`,
     });
   };
+
   const bruxoRemove = bruxos.find((b) => b.id === id);
   if (!bruxoRemove) {
     res.status(404).json({
@@ -159,14 +160,32 @@ const updateBruxo = (req, res) => {
       success: false,
       message: `O id deve ser válido`,
     });
-  }
+  };
+  
+  if (!nome || !casa || !mascote || !varinha || !patrono || !especialidade) {
+    return res.status(400).json({
+        success: false,
+        status: 400,
+        message: `Dados para editar o bruxo estão inválidos!`,
+        error: "VALIDATION_ERROR",
+        details: {
+            nome: "Nome do bruxo é obrigatório",
+            casa: "Casa do bruxo é obrigatória",
+            mascote: "Mascote do bruxo é obrigatório",
+            varinha: "Varinha do bruxo é obrigatória",
+            patrono: "Patrono do bruxo é obrigatório",
+            especialidade: "Especialidade do bruxo é obrigatória",
+        },
+    });
+};
+
   const bruxoExiste = bruxos.find((p) => p.id === id);
   if (!bruxoExiste) {
     return res.status(404).json({
       success: false,
       message: `Esse id não foi encontrado: ${id}`,
     });
-  }
+  };
   const bruxoAtualizado = bruxos.map((bruxo) =>
     bruxo.id === id
       ? {

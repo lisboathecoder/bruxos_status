@@ -42,81 +42,72 @@ const getBruxosById = (req, res) => {
 };
 
 const createBruxos = (req, res) => {
-  let id = parseInt(req.params.id);
-  const bruxosId = bruxos.find((i) => i.id === id);
+    const { nome, casa, ano, varinha, mascote, patrono, especialidade, vivo } = req.body;
+    const casasNomes = ["Lufa-Lufa", "Corvinal", "Sonserina", "Grifinória"];
 
-  const { nome, casa, ano, varinha, mascote, patrono, especialidade, vivo } =
-    req.body;
-  const casas = ["Lufa-Lufa", "Corvinal", "Sonserina", "Grifinória"];
-  if (!casa || !casas.includes(casa.toLowerCase())) {
-    res.status(400).json({
-      success: false,
-      status: 400,
-      error: "VALIDATION_ERROR",
-      message: `O campo de casa é obrigatório e deve ser uma das opções: ${casas.join(", ")}!`,
-    });
-  }
-  if (varinha.length < 3) {
-    res.status(400).json({
-      success: false,
-      status: 400,
-      error: "VALIDATION_ERROR",
-      message: `O nome da varinha deve ter pelo menos 3 caracteres`,
-    });
-  }
-  if (
-    (!nome,
-    !casa,
-    !mascote,
-    !varinha,
-    !patrono,
-    (!especialidade && nome != null) || undefined)
-  ) {
-    res.status(400).json({
-      success: false,
-      status: 400,
-      message: `Dados de criação inválidos!`,
-      error: "VALIDATION_ERROR",
-      details: {
-        nome: "Nome do bruxo é obrigatório",
-        casa: "Casa do bruxo é obrigatória",
-        mascote: "Mascote do bruxo é obrigatório",
-        varinha: "Varinha do bruxo é obrigatória",
-        patrono: "Patrono do bruxo é obrigatório",
-        especialidade: "Especialidade do bruxo é obrigatória",
-      },
-    });
-  }
+    if (!casa || !casasNomes.includes(casa)) {
+        return res.status(400).json({
+            success: false,
+            status: 400,
+            error: "VALIDATION_ERROR",
+            message: `O campo de casa é obrigatório e deve ser uma das opções: ${casasNomes.join(", ")}!`,
+        });
+    }
 
-  if (bruxos.some((b) => b.nome === nome)) {
-    res.status(409).json({
-      status: 409,
-      success: false,
-      message: "Wizard already enrolled at Hogwarts",
-      error: "DUPLICATE_WIZARD",
-      existingId: id,
+    if (varinha.length < 3) {
+        return res.status(400).json({
+            success: false,
+            status: 400,
+            error: "VALIDATION_ERROR",
+            message: `O nome da varinha deve ter pelo menos 3 caracteres`,
+        });
+    }
+
+    if (!nome || !casa || !mascote || !varinha || !patrono || !especialidade) {
+        return res.status(400).json({
+            success: false,
+            status: 400,
+            message: `Dados de criação inválidos!`,
+            error: "VALIDATION_ERROR",
+            details: {
+                nome: "Nome do bruxo é obrigatório",
+                casa: "Casa do bruxo é obrigatória",
+                mascote: "Mascote do bruxo é obrigatório",
+                varinha: "Varinha do bruxo é obrigatória",
+                patrono: "Patrono do bruxo é obrigatório",
+                especialidade: "Especialidade do bruxo é obrigatória",
+            },
+        });
+    }
+
+    if (bruxos.some((b) => b.nome === nome)) {
+        return res.status(409).json({
+            status: 409,
+            success: false,
+            message: "Wizard already enrolled at Hogwarts",
+            error: "DUPLICATE_WIZARD",
+        });
+    }
+
+    const novoBruxo = {
+        id: bruxos.length + 1,
+        nome,
+        casa,
+        ano: ano || new Date(),
+        mascote,
+        varinha,
+        patrono,
+        especialidade,
+        vivo: vivo || true,
+    };
+
+    bruxos.push(novoBruxo);
+    return res.status(201).json({
+        status: 201,
+        success: true,
+        message: `Bruxo criado com sucesso!`,
+        bruxo: novoBruxo,
     });
-  }
-
-  const novoBruxo = {
-    id: bruxos.length + 1,
-    nome,
-    casa,
-    ano: ano || new Date(),
-    mascote,
-    varinha,
-    patrono,
-    especialidade,
-    vivo: vivo || true,
-  };
-
-  bruxos.push(novoBruxo);
-  return res.status(201).json({
-    status: 201,
-    success: true,
-    message: `Bruxo criado com sucesso!`,
-    bruxo: novoBruxo,
-  });
 };
 
 const deleteBruxo = (req, res) => {

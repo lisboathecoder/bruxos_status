@@ -111,6 +111,17 @@ const createBruxos = (req, res) => {
 };
 
 const deleteBruxo = (req, res) => {
+
+    const { admin } = req.query;
+    if (!admin || admin !== "true") {
+        return res.status(403).json({
+            status: 403,
+            success: false,
+            error: "FORBIDDEN",
+            message: "Apenas administradores podem realizar essa ação.",
+        });
+    }
+    
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     res.status(400).json({

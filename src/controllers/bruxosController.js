@@ -84,7 +84,8 @@ const createBruxos = (req, res) => {
         return res.status(409).json({
             status: 409,
             success: false,
-            message: "Wizard already enrolled at Hogwarts",
+            message: "Esse bruxo já existe, não pode ter bruxos duplicados",
+            suggest: "Crie o bruxo com outro nome!",
             error: "DUPLICATE_WIZARD",
         });
     };

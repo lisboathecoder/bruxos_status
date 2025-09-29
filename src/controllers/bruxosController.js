@@ -38,7 +38,7 @@ const getBruxosById = (req, res) => {
       error: "WIZARD_NOT_FOUND",
       message: `Bruxo não encontrado com esse id: ${id}`,
     });
-  }
+  };
 };
 
 const createBruxos = (req, res) => {
@@ -52,7 +52,7 @@ const createBruxos = (req, res) => {
             error: "VALIDATION_ERROR",
             message: `O campo de casa é obrigatório e deve ser uma das opções: ${casasNomes.join(", ")}!`,
         });
-    }
+    };
 
     if (varinha.length < 3) {
         return res.status(400).json({
@@ -61,7 +61,7 @@ const createBruxos = (req, res) => {
             error: "VALIDATION_ERROR",
             message: `O nome da varinha deve ter pelo menos 3 caracteres`,
         });
-    }
+    };
 
     if (!nome || !casa || !mascote || !varinha || !patrono || !especialidade) {
         return res.status(400).json({
@@ -78,7 +78,7 @@ const createBruxos = (req, res) => {
                 especialidade: "Especialidade do bruxo é obrigatória",
             },
         });
-    }
+    };
 
     if (bruxos.some((b) => b.nome === nome)) {
         return res.status(409).json({
@@ -87,7 +87,7 @@ const createBruxos = (req, res) => {
             message: "Wizard already enrolled at Hogwarts",
             error: "DUPLICATE_WIZARD",
         });
-    }
+    };
 
     const novoBruxo = {
         id: bruxos.length + 1,
@@ -120,8 +120,8 @@ const deleteBruxo = (req, res) => {
             error: "FORBIDDEN",
             message: "Apenas administradores podem realizar essa ação.",
         });
-    }
-    
+    };
+
   const id = parseInt(req.params.id);
   if (isNaN(id)) {
     res.status(400).json({

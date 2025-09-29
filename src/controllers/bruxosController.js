@@ -131,7 +131,7 @@ const deleteBruxo = (req, res) => {
       error: "INVALID_ID",
       message: `O id deve ser um número válido`,
     });
-  }
+  };
   const bruxoRemove = bruxos.find((b) => b.id === id);
   if (!bruxoRemove) {
     res.status(404).json({
@@ -140,7 +140,7 @@ const deleteBruxo = (req, res) => {
       error: "WIZARD_NOT_FOUND",
       message: `Bruxo não encontrado com esse id: ${id}`,
     });
-  }
+  };
   const bruxoFiltrado = bruxos.filter((b) => b.id !== id);
   bruxos.splice(0, bruxos.length, ...bruxoFiltrado);
   return res.status(200).json({
